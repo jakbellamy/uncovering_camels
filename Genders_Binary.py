@@ -1,11 +1,11 @@
 from random import randint as ran
+from requests import post
 
 
 class Human:
-    def __init__(self, gender, age=ran(14, 70), height=ran(140, 220), hair_color=ran(0, 4),
-                 hair_length=ran(0, 2), eye_color=ran(0, 3)):
+    def __init__(self, gender, age, height, haircolor, hairlength, eyecolor):
         self.options = {
-            'hair_color': ('blonde', 'brown', 'black', 'red', 'grey'),
+            'hair_colors': ('blonde', 'brown', 'black', 'red', 'grey'),
             'eye_colors': ('blue', 'green', 'brown', 'grey'),
             'hair_lengths': {
                 'female': ['long', 'middle', 'short'],
@@ -14,9 +14,9 @@ class Human:
         }
         self.age = age
         self.height = height
-        self.hair_color = self.select(self.options['hair_color'], hair_color)
-        self.hair_length = self.select(self.options['hair_lengths'][gender], hair_length)
-        self.eye_color = self.select(self.options['eye_colors'], eye_color)
+        self.haircolor = self.select(self.options['hair_colors'], haircolor)
+        self.hairlength = self.select(self.options['hair_lengths'][gender], hairlength)
+        self.eyecolor = self.select(self.options['eye_colors'], eyecolor)
         self.gender = gender
 
     @staticmethod
@@ -29,27 +29,29 @@ class Human:
         else:
             return choices[ran(0, max_index)]
 
-    def values(self):
+    def asses_worth(self):
         obj = self.__dict__
-        obj.pop('options')
-        return obj
+        if hasattr(self, 'options'): obj.pop('options')
+        res = post('https://kamelrechner.eu/en/result', data=obj)
+        self.worth = int(str(res.content).split('<span class="result">')[1].split('<')[0])
 
 
 class Girl(Human):
-    def __init__(self, gender='female', boob_size=ran(0, 3), figure=ran(0, 4)):
-        super().__init__(gender)
+    def __init__(self, age, height, haircolor, hairlength, eyecolor, boobsize, figure=ran, gender='female'):
+        super().__init__(gender, age, height, haircolor, hairlength, eyecolor)
         self.options = {
             'boob_sizes': ('a', 'b', 'c', 'd'),
             'figures': ('thin', 'sporty', 'normal', 'chubby', 'fat')
         }
         self.gender = gender
-        self.boob_size = super().select(self.options['boob_sizes'], boob_size)
+        self.boobsize = super().select(self.options['boob_sizes'], boobsize)
         self.figure = super().select(self.options['figures'], figure)
+        super().asses_worth()
 
 
 class Boy(Human):
-    def __init__(self, gender='male', beard=ran(0, 3), body=ran(0, 2)):
-        super().__init__(gender)
+    def __init__(self, age, height, haircolor, hairlength, eyecolor, beard, body, gender='male'):
+        super().__init__(gender, age, height, haircolor, hairlength, eyecolor)
         self.options = {
             'beards': ('none', 'small', 'middle', 'large'),
             'bodies': ('muscle', 'normal', 'chubby')
@@ -57,7 +59,4 @@ class Boy(Human):
         self.gender = gender
         self.beard = super().select(self.options['beards'], beard)
         self.body = super().select(self.options['bodies'], body)
-
-
-girl = Girl()
-print(girl.values())
+        super().asses_worth()
