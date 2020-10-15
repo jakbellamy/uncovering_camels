@@ -44,7 +44,7 @@ class Girl(Human):
             'figures': ('thin', 'sporty', 'normal', 'chubby', 'fat')
         }
         self.gender = gender
-        self.boobsize = super().select(self.options['boob_sizes'], boobsize)
+        self.boobs = super().select(self.options['boob_sizes'], boobsize)
         self.figure = super().select(self.options['figures'], figure)
         super().asses_worth()
 
