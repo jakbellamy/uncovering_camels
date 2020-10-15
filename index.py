@@ -21,6 +21,7 @@ if not iteration_input.isdigit():
 
 iterative = int(iteration_input)
 
+filename = input('Type Filename\n')
 
 #   Data Collection
 data = []
@@ -37,5 +38,5 @@ while count < iterative:
 df = pd.DataFrame(data)
 print(df)
 
-df.to_csv('./data/' + input('Type Filename\n') + '.csv')
+df.to_csv('./data/' + filename + '.csv')
 print('complete!')
