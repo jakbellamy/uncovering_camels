@@ -15,7 +15,7 @@ class Human:
         self.age = age
         self.height = height
         self.haircolor = self.select(self.options['hair_colors'], haircolor)
-        self.hairlength = self.select(self.options['hair_lengths'][gender], hairlength)
+        self.hair = self.select(self.options['hair_lengths'][gender], hairlength)
         self.eyecolor = self.select(self.options['eye_colors'], eyecolor)
         self.gender = gender
 
