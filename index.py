@@ -37,5 +37,5 @@ while count < iterative:
 df = pd.DataFrame(data)
 print(df)
 
-df.to_csv('./data/' + input + '.csv')
+df.to_csv('./data/' + input('Type Filename\n') + '.csv')
 print('complete!')
