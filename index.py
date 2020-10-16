@@ -47,12 +47,18 @@ def analyze():
         bad_in()
     val = cols[int(at_in)]
 
-    ax = sns.regplot(x=val, y='worth', data=df, fit_reg=True)
-    ax.set_title(input('[0] graph title: \n'))
-    ax.set_ylabel('Worth (In Camels)')
-    plt.show()
-    return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
-
+    if isinstance(val, int):
+        ax = sns.regplot(x=val, y='worth', data=df, fit_reg=True)
+        ax.set_title(input('[0] graph title: \n'))
+        ax.set_ylabel('Worth (In Camels)')
+        plt.show()
+        return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
+    else:
+        ax = sns.boxplot(x=val, y="worth", data=df)
+        ax.set_title(input('[0] graph title: \n'))
+        ax.set_ylabel('Worth (In Camels)')
+        plt.show()
+        return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
 
 while True:
     again = analyze()
