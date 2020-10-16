@@ -1,29 +1,18 @@
 import pandas as pd
 from Genders_Binary import Girl, Boy
 from random import randint as ran
+from helpers import choose_gender, choose_iterative, choose_filename
+import sys
 
+if len(sys.argv) == 1:
+    gender_choice = choose_gender()
+    iterative = int(choose_iterative())
+    filename = choose_filename(input)
+else:
+    gender_choice = sys.argv[1]
+    iterative = int(sys.argv[2])
+    filename = sys.argv[3]
 
-#   Input Dialogues
-def bad_in():
-    print('[-] Bad Input.\n[-] ')
-    exit()
-
-
-gender_choice = input('[-] What Gender You Want?\n' +
-                      '[-] | 1. Girl | 2. Boy |\n[-] ')
-
-if not gender_choice == '1' and not gender_choice == '2':
-    bad_in()
-
-iteration_input = input('[-] How Many You Want to Make?\n[-] ')
-if not iteration_input.isdigit():
-    bad_in()
-
-iterative = int(iteration_input)
-
-filename = input('[-] Filename? (.csv already included)\n[-] ')
-
-#   Data Collection
 data = []
 count = 0
 while count < iterative:
@@ -39,5 +28,4 @@ while count < iterative:
 df = pd.DataFrame(data)
 print(df)
 
-df.to_csv('./data/' + filename + '.csv', index=False)
-print('[!] fin. [!]')
+print('File Created.')
