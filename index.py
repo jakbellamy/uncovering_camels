@@ -46,8 +46,15 @@ def analyze():
     if not at_in.isdigit() or not 0 <= int(at_in) < len(attr_list):
         bad_in()
 
-    df.set_index(cols[int(at_in)])
-    df.sort_index()
+    val = cols[int(at_in)]
+
+    x_min = min(df[val])
+    x_max = max(df[val])
+    x_mid = (x_min + x_max) / 2
+    plt.xticks([x_min, x_mid, x_max])
+
+    df.set_index(val, inplace=True)
+    df.sort_index(inplace=True)
 
     selected = df['worth']
     coefficients, residuals, _, _, _ = np.polyfit(range(len(selected.index)), selected, 1, full=True)
