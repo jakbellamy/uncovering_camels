@@ -55,7 +55,7 @@ def analyze():
         return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
     else:
         ax = sns.boxplot(x=val, y="worth", data=df)
-        ax.set_title(input('[0] graph title: \n'))
+        ax.set_title(f"{'Women' if df[0]['gender'] == 'female' else 'Men'}" + f"'s Worth by {val.capitalize()}")
         ax.set_ylabel('Worth (In Camels)')
         plt.show()
         return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
