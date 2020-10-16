@@ -1,11 +1,12 @@
 from os import listdir, system
+from matplotlib import pyplot as plt
+import numpy as np
 import pandas as pd
 from helpers import bad_in, path, rem_ext, choose_filename, \
     choose_gender, choose_iterative, prompt_lister
 
 system('tput reset')
 print('[0] WELCOME [0] \n')
-
 
 file_list = [(f"{i}) {rem_ext(file).upper()} | ", rem_ext(file)) for (i, file) in enumerate(listdir('./data'))]
 file_prompt = '[-] Choose a File:\n[-] ' + ''.join([prompt[0] for prompt in file_list]) + '\n[-] '
@@ -33,16 +34,37 @@ else:
     print('[-] Data Generated!\n')
     print(f'\n[SELECTED FILEPATH] => {path(file)}\n')
 
-system('tput reset')
-print('[-] File Data: \n')
 df = pd.read_csv(path(file))
-
-
 cols = [at for at in list(df.columns.values) if at[1] != 'worth' and at[1] != 'gender']
 attr_list = prompt_lister(cols)
-at_in = input('[-] ' + ''.join([at[0] for at in attr_list]) + '\n[-] ')
 
-if not at_in.isdigit() or not 0 <= int(at_in) < len(attr_list):
-    bad_in()
 
-selected = df.loc['worth', cols[int(at_in)]]
+def analyze():
+    system('tput reset')
+    at_in = input('[-] ' + ''.join([at[0] for at in attr_list]) + '\n[-] ')
+
+    if not at_in.isdigit() or not 0 <= int(at_in) < len(attr_list):
+        bad_in()
+
+    df.set_index(cols[int(at_in)])
+    df.sort_index()
+
+    selected = df['worth']
+    coefficients, residuals, _, _, _ = np.polyfit(range(len(selected.index)), selected, 1, full=True)
+    mse = residuals[0] / (len(selected.index))
+    nrmse = np.sqrt(mse) / (selected.max() - selected.min())
+
+    selected.plot()
+    plt.plot([coefficients[0] * x + coefficients[1] for x in range(len(selected))])
+    plt.show()
+
+    system('tput reset')
+    return input('[-] Press q + Enter to exit. Otherwise, hit Enter')
+
+
+while True:
+    again = analyze()
+    if again == 'q':
+        break
+
+print('Thanks!')
