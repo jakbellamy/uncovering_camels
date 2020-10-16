@@ -47,15 +47,15 @@ def analyze():
         bad_in()
     val = cols[int(at_in)]
 
-    if isinstance(val, int):
+    if val == 'age' or val == 'height':
         ax = sns.regplot(x=val, y='worth', data=df, fit_reg=True)
-        ax.set_title(input('[0] graph title: \n'))
+        ax.set_title(f"{'Women' if df.iloc[0]['gender'] == 'female' else 'Men'}" + f"'s Worth by {val.capitalize()}")
         ax.set_ylabel('Worth (In Camels)')
         plt.show()
         return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
     else:
         ax = sns.boxplot(x=val, y="worth", data=df)
-        ax.set_title(f"{'Women' if df[0]['gender'] == 'female' else 'Men'}" + f"'s Worth by {val.capitalize()}")
+        ax.set_title(f"{'Women' if df.iloc[0]['gender'] == 'female' else 'Men'}" + f"'s Worth by {val.capitalize()}")
         ax.set_ylabel('Worth (In Camels)')
         plt.show()
         return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
