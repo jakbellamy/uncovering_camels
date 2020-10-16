@@ -1,6 +1,7 @@
 from os import listdir, system
 from matplotlib import pyplot as plt
 import numpy as np
+import seaborn as sns
 import pandas as pd
 from helpers import bad_in, path, rem_ext, choose_filename, \
     choose_gender, choose_iterative, prompt_lister
@@ -35,38 +36,22 @@ else:
     print(f'\n[SELECTED FILEPATH] => {path(file)}\n')
 
 df = pd.read_csv(path(file))
-cols = [at for at in list(df.columns.values) if at[1] != 'worth' and at[1] != 'gender']
+cols = [at for at in list(df.columns.values) if at != 'worth' and at != 'gender']
 attr_list = prompt_lister(cols)
 
 
 def analyze():
     system('tput reset')
     at_in = input('[-] ' + ''.join([at[0] for at in attr_list]) + '\n[-] ')
-
     if not at_in.isdigit() or not 0 <= int(at_in) < len(attr_list):
         bad_in()
-
     val = cols[int(at_in)]
 
-    x_min = min(df[val])
-    x_max = max(df[val])
-    x_mid = (x_min + x_max) / 2
-    plt.xticks([x_min, x_mid, x_max])
-
-    df.set_index(val, inplace=True)
-    df.sort_index(inplace=True)
-
-    selected = df['worth']
-    coefficients, residuals, _, _, _ = np.polyfit(range(len(selected.index)), selected, 1, full=True)
-    mse = residuals[0] / (len(selected.index))
-    nrmse = np.sqrt(mse) / (selected.max() - selected.min())
-
-    selected.plot()
-    plt.plot([coefficients[0] * x + coefficients[1] for x in range(len(selected))])
+    ax = sns.regplot(x=val, y='worth', data=df, fit_reg=True)
+    ax.set_title(input('[0] graph title: \n'))
+    ax.set_ylabel('Worth (In Camels)')
     plt.show()
-
-    system('tput reset')
-    return input('[-] Press q + Enter to exit. Otherwise, hit Enter')
+    return input('\n\n[-] Press q + Enter to exit. Otherwise, hit Enter\n[-] ')
 
 
 while True:
